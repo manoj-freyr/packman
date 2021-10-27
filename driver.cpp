@@ -1,7 +1,11 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <algorithm>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
 #include "utils.h"
 
 std::string searchos(std::string os_name){
@@ -36,8 +40,73 @@ std::string getOS(){
   }
 
 }
+
+std::string get_last_word(const std::string& input){
+	std::stringstream is{input};
+	std::string temp, last;
+	while (std::getline(is, temp, ' ')) {
+        last=temp;
+    }
+	return last;
+}
+bool parser(std::string s_data, package_info& info){
+	std::stringstream data{s_data};
+	// first line tells if we need to proceed or not.
+	std::string line;
+	bool found = false;
+	while(std::getline(data, line)){
+		if(line.find("Version") != std::string::npos){
+			info.version = get_last_word(line);
+			found = true;
+		} else if( line.find("Package") != std::string::npos){
+			info.name = get_last_word(line);
+		}		
+	}
+	return found;
+}
+
+
+void print_version(std::string package){
+	int read_pipe[2]; // From child to parent
+	int exit_status;
+	if(pipe(read_pipe) == -1){
+		perror("Pipe");
+		return;
+	}
+	pid_t process_id = fork();
+	if(process_id < 0){
+		perror("Fork");
+		return;
+	}else if(process_id == 0) {
+		dup2(read_pipe[1], 1);
+		close(read_pipe[0]);
+		close(read_pipe[1]);
+		execlp("dpkg", "dpkg", "--status", package.c_str(), NULL);
+	} else {
+		// parent:
+		int status;
+		waitpid(process_id, &status,0);
+		std::stringstream ss;
+		close(read_pipe[1]);
+		//dup(read_pipe[0], 0);
+		{
+			char arr[4096];
+			int n = read(read_pipe[0], arr, sizeof(arr));
+			ss.write(arr, n);
+
+		}
+		std::cout << ss.str() << std::endl;
+		close(read_pipe[0]);
+		std::string ver_string{};
+		package_info pinfo; 
+		auto res = parser(ss.str(), pinfo);
+		std::cout << pinfo.name << " and " << pinfo.version << std::endl;
+		return;
+	}
+}
 int main(){
-  std::cout << getOS() << std::endl;
+  //std::cout << getOS() << std::endl;
+	print_version({"rocminfo"});
   return 0;
 
 }
