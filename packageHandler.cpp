@@ -11,10 +11,12 @@ bool PackageHandler::parseManifest(){
 	assert(ifs.good());
 	std::string line;
 	while(std::getline(ifs, line)){
+		if(line.empty())
+			continue;
 		std::istringstream iss{line};
 		std::string name, ver;
 		iss >> name >> ver;
-		if(iss.eof()){
+		if(!iss.eof()){
 			std::cout  << "error line format" << line << std::endl; //crude validation
 			return false;
 		}

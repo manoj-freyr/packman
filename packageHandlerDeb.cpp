@@ -56,7 +56,7 @@ std::string PackageHandlerDeb::getInstalledVersion(const std::string& package){
       ss.write(arr, n);
 
     }
-    std::cout << ss.str() << std::endl;
+    //std::cout << ss.str() << std::endl;
     close(read_pipe[0]);
     std::string ver_string{};
     auto res = pkgrOutputParser(ss.str(), pinfo);
@@ -76,7 +76,7 @@ bool PackageHandlerDeb::validatePackages(){
 		return true;
 	}
 	bool res;
-	uint8_t totalPackages = 0, missingPackages = 0, badVersions = 0;
+	int totalPackages = 0, missingPackages = 0, badVersions = 0;
 	for (const auto& val: pkgmap){
 		++totalPackages;
 		auto inputname    = val.first;
