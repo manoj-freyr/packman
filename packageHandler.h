@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include "utils.h"
 
 class PackageHandler{
 public:
@@ -13,11 +14,13 @@ public:
 	std::string getManifest() const{
 		return m_manifest;
 	}
-	bool parseManifest(); // and load m_pkgversionmap
+	virtual bool parseManifest(); // and load m_pkgversionmap
 	virtual bool validatePackages() = 0;
 	const std::map<std::string, std::string>& getPackageMap() const{
 		return m_pkgversionmap;
 	}
+	virtual std::string getInstalledVersion(const std::string& package) = 0;
+	virtual bool pkgrOutputParser(const std::string& s_data, package_info& info) = 0;
 	virtual ~PackageHandler(){}
 	
 private:

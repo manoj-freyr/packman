@@ -49,6 +49,7 @@ std::string get_last_word(const std::string& input){
     }
 	return last;
 }
+/*
 bool parser(std::string s_data, package_info& info){
 	std::stringstream data{s_data};
 	// first line tells if we need to proceed or not.
@@ -105,7 +106,6 @@ void find_version(std::string package){
 	}
 }
 
-/*
 int main(){
   //std::cout << getOS() << std::endl;
 	print_version({"rocminfo"});

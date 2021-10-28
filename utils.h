@@ -11,6 +11,9 @@ struct package_info{
 	std::string version;
 	
 };
+
+// common funtions
+std::string get_last_word(const std::string& input);
 /*
 class linebuffer : public std::streambuf {
     std::string line{};
