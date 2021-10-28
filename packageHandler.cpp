@@ -1,4 +1,8 @@
 #include <fstream>
+#include <assert.h>
+#include <sstream>
+#include <iostream>
+#include "packageHandler.h"
 #include "packageHandler.h"
 
 bool PackageHandler::parseManifest(){
@@ -7,13 +11,15 @@ bool PackageHandler::parseManifest(){
 	assert(ifs.good());
 	std::string line;
 	while(std::getline(ifs, line)){
-		std::istringstream iss(line);
+		std::istringstream iss{line};
 		std::string name, ver;
 		iss >> name >> ver;
 		if(iss.eof()){
-			std::out  << "error line format" << line << std::endl; //crude validation
+			std::cout  << "error line format" << line << std::endl; //crude validation
+			return false;
 		}
 		m_pkgversionmap.emplace(name, ver);
 	}
 	std::cout << m_pkgversionmap.size() << " is the size " << std::endl;
+	return true;
 }

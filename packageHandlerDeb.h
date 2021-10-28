@@ -10,5 +10,5 @@ public:
 																	package_info& info)	override;
 	std::string getInstalledVersion(const std::string& package) override;	
 	~PackageHandlerDeb(){}
-}
+};
 #endif

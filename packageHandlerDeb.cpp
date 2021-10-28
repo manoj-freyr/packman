@@ -28,14 +28,16 @@ bool PackageHandlerDeb::pkgrOutputParser(const std::string& s_data, package_info
 std::string PackageHandlerDeb::getInstalledVersion(const std::string& package){
   int read_pipe[2]; // From child to parent
   int exit_status;
+	package_info pinfo;
   if(pipe(read_pipe) == -1){
     perror("Pipe");
-    return;
+    return pinfo.version;
   }
   pid_t process_id = fork();
   if(process_id < 0){
     perror("Fork");
-    return;
+    return pinfo.version;
+
   }else if(process_id == 0) {
     dup2(read_pipe[1], 1);
     close(read_pipe[0]);
@@ -57,10 +59,13 @@ std::string PackageHandlerDeb::getInstalledVersion(const std::string& package){
     std::cout << ss.str() << std::endl;
     close(read_pipe[0]);
     std::string ver_string{};
-    package_info pinfo;
-    auto res = parser(ss.str(), pinfo);
+    auto res = pkgrOutputParser(ss.str(), pinfo);
+		if(!res){
+			std::cout << "error" << std::endl;
+			return std::string{};
+		}
     std::cout << pinfo.name << " and " << pinfo.version << std::endl;
-    return;
+    return pinfo.version;
   }
 
 }
@@ -76,8 +81,8 @@ bool PackageHandlerDeb::validatePackages(){
 		++totalPackages;
 		auto inputname    = val.first;
 		auto inputversion = val.second;
-		auto installedvers = getInstalledVersion(iname);
-		if(installedvers.empty(){
+		auto installedvers = getInstalledVersion(inputname);
+		if(installedvers.empty()){
 			++missingPackages;
 			res = false;
 			std::cout << "Error: package " << inputname << " not installed " <<

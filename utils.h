@@ -7,8 +7,8 @@ const std::string name_key {"NAME"};
 const std::vector<std::string> op_systems{ "ubuntu", "centos", "sles"};
 
 struct package_info{
-	std::string name;
-	std::string version;
+	std::string name{};
+	std::string version{};
 	
 };
 
