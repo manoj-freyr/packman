@@ -1,9 +1,13 @@
-#include "packageHandlerDeb.h"
+#include "handlerCreator.h"
 
 int main(){
-	PackageHandler* pObj = new PackageHandlerDeb();
-	pObj->setManifest("/home/amd/freyr/exper/packman/packman/package-list.txt");
-	pObj->parseManifest();
-	auto pass = pObj->validatePackages();	
+	handlerCreator creator;
+	auto hander = creator.getPackageHandler();
+	if(!hander){
+		return -1;
+	}
+	hander->setManifest("/home/amd/freyr/exper/packman/packman/package-list.txt");
+	hander->parseManifest();
+	auto pass = hander->validatePackages();	
 	return 0;	
 }

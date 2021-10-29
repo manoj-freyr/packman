@@ -14,6 +14,7 @@ struct package_info{
 
 // common funtions
 std::string get_last_word(const std::string& input);
+std::string getOS();
 /*
 class linebuffer : public std::streambuf {
     std::string line{};
