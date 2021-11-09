@@ -2,13 +2,15 @@
 Tool to validate installation using a package lookup file for Linux OSes.
 
 ## building:
+```
 git clone https://github.com/manoj-freyr/packman.git
 cd packman
 mkdir build; cd build
 cmake ..
 make
-
+```
 a test file is included in repo: package-list.txt
+
 put appropriate location of file in driver.cpp and build code.
 
 ## run:
