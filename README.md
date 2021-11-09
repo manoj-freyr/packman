@@ -13,6 +13,7 @@ put appropriate location of file in driver.cpp and build code.
 
 ## run:
 ./packman
+```
 
   OS installed is : Ubuntu
   4 packages to validate
@@ -29,4 +30,5 @@ put appropriate location of file in driver.cpp and build code.
           Valid Packages                : 2
           Missing Packages              : 1
           Packages version mismatch     : 1
+```
 
