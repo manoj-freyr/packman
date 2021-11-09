@@ -19,6 +19,8 @@ bool PackageHandlerDeb::pkgrOutputParser(const std::string& s_data, package_info
       found = true;
     } else if( line.find("Package") != std::string::npos){
       info.name = get_last_word(line);
+			if(found) // preevnt further processing
+				return found;
     }
   }
   return found;
@@ -61,22 +63,23 @@ std::string PackageHandlerDeb::getInstalledVersion(const std::string& package){
     std::string ver_string{};
     auto res = pkgrOutputParser(ss.str(), pinfo);
 		if(!res){
-			std::cout << "error" << std::endl;
+			std::cout << "error in parsing" << std::endl;
 			return std::string{};
 		}
-    std::cout << pinfo.name << " and " << pinfo.version << std::endl;
+    //std::cout << pinfo.name << " and " << pinfo.version << std::endl;
     return pinfo.version;
   }
 
 }
 
-bool PackageHandlerDeb::validatePackages(){
+void PackageHandlerDeb::validatePackages(){
 	auto pkgmap = getPackageMap();
 	if(pkgmap.empty()){
-		return true;
+		std::cout << "no packages to validate in the file " << std::endl;
+		return;
 	}
-	bool res;
-	int totalPackages = 0, missingPackages = 0, badVersions = 0;
+	int totalPackages = 0, missingPackages = 0, badVersions = 0,
+		installedPackages = 0;
 	for (const auto& val: pkgmap){
 		++totalPackages;
 		auto inputname    = val.first;
@@ -84,7 +87,6 @@ bool PackageHandlerDeb::validatePackages(){
 		auto installedvers = getInstalledVersion(inputname);
 		if(installedvers.empty()){
 			++missingPackages;
-			res = false;
 			std::cout << "Error: package " << inputname << " not installed " <<
 					std::endl;
 			continue;
@@ -92,18 +94,19 @@ bool PackageHandlerDeb::validatePackages(){
 
 		if( inputversion.compare(installedvers)){
 			++badVersions;
-			res = false;
-			std::cout << "ERROR: version mismatch for package " << inputname <<
+			std::cout << "Error: version mismatch for package " << inputname <<
 					" expected version: " << inputversion << " but installed " <<
 					installedvers << std::endl;
 		} else {
+			++installedPackages;
 			std::cout << "Package " << inputname << " installed version is " << 
 					installedvers << std::endl;
 		}
 	}
 	std::cout << "RCQT complete : " << std::endl;
-	std::cout << "\tTotal Packages Installed : " << totalPackages   << std::endl;
-	std::cout << "\tMissing Packages         : " << missingPackages << std::endl;
-	std::cout << "\tPackages version mismatch: " << badVersions     << std::endl;
-	return res;	
+	std::cout << "\tTotal Packages to validate    : " << totalPackages     << std::endl;
+	std::cout << "\tValid Packages                : " << installedPackages << std::endl;
+	std::cout << "\tMissing Packages              : " << missingPackages   << std::endl;
+	std::cout << "\tPackages version mismatch     : " << badVersions       << std::endl;
+	return ;	
 }
