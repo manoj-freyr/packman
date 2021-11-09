@@ -34,7 +34,7 @@ std::string getOS(){
       if(found == std::string::npos || endquote == std::string::npos)
         return std::string{};
       std::string osame = line.substr(found+1, endquote-found-1 );
-      std::cout << osame << std::endl;
+      std::cout << "OS installed is : " << osame << std::endl;
 			return searchos(osame);
     }
   }

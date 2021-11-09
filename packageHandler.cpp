@@ -22,6 +22,6 @@ bool PackageHandler::parseManifest(){
 		}
 		m_pkgversionmap.emplace(name, ver);
 	}
-	std::cout << m_pkgversionmap.size() << " is the size " << std::endl;
+	std::cout << m_pkgversionmap.size() << " packages to validate " << std::endl;
 	return true;
 }
