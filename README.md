@@ -11,10 +11,10 @@ make
 ```
 a test file is included in repo: package-list.txt
 
-put appropriate location of file in driver.cpp and build code.
+put appropriate location of file in command line as below
 
 ## run:
-./packman
+./packman /path/to/package-list.txt
 ```
 
   OS installed is : Ubuntu
