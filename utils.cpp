@@ -1,11 +1,3 @@
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <algorithm>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/wait.h>
 #include "utils.h"
 
 std::string searchos(std::string os_name){
@@ -48,6 +40,19 @@ std::string get_last_word(const std::string& input){
         last=temp;
     }
 	return last;
+}
+
+std::string pfilename(const std::string& package){
+	std::string fname{"/usr/local/"};
+  fname += package;
+	using namespace std::chrono;
+	auto now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+	fname += {"."} + 
+	std::ostringstream oss;
+	oss << now;
+	fname += {"."} + oss.str();
+	std::cout << "MANOJU " << fname << std::endl;
+	return fname;
 }
 /*
 bool parser(std::string s_data, package_info& info){
