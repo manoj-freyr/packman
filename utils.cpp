@@ -1,5 +1,6 @@
 #include "utils.h"
 
+
 std::string searchos(std::string os_name){
 	std::string lowcasename{os_name};
 	std::transform( lowcasename.begin(), lowcasename.end(), lowcasename.begin(),
@@ -51,7 +52,6 @@ std::string pfilename(const std::string& package){
 	std::ostringstream oss;
 	oss << now;
 	fname += {"."} + oss.str();
-	std::cout << "MANOJU " << fname << std::endl;
 	return fname;
 }
 /*

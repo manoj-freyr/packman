@@ -23,7 +23,7 @@ struct package_info{
 // common funtions
 std::string get_last_word(const std::string& input);
 std::string getOS();
-
+std::string remSpaces(std::string& str);
 std::string pfilename(const std::string& package);
 /*
 */
