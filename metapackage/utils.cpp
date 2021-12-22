@@ -12,7 +12,9 @@ std::string pfilename(const std::string& package){
   auto now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
   std::ostringstream oss;
   oss << now;
-  fname = fname +  {"."} + oss.str() + {".txt"};
+  fname +=  {"."}; 
+	fname += oss.str();
+	fname += {".txt"};
   return fname;
 }
 
